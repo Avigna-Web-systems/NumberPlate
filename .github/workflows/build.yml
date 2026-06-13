@@ -22,16 +22,16 @@ jobs:
         dotnet workload install android
 
     - name: Clean
-      run: dotnet clean NumberPlate/NumberPlate.csproj
+      run: dotnet clean NumberPlate.csproj
 
     - name: Restore
-      run: dotnet restore NumberPlate/NumberPlate.csproj
+      run: dotnet restore NumberPlate.csproj
 
     - name: Build Android
-      run: dotnet build NumberPlate/NumberPlate.csproj -f net9.0-android -c Release
+      run: dotnet build NumberPlate.csproj -f net9.0-android -c Release
 
     - name: Publish APK
-      run: dotnet publish NumberPlate/NumberPlate.csproj -f net9.0-android -c Release
+      run: dotnet publish NumberPlate.csproj -f net9.0-android -c Release
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
