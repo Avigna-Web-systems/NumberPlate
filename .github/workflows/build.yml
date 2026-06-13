@@ -6,18 +6,13 @@ on:
       - master
 
 jobs:
-
   build:
-
     runs-on: windows-latest
 
     steps:
+    - uses: actions/checkout@v4
 
-    - name: Checkout Code
-      uses: actions/checkout@v4
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+    - uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '9.0.x'
 
@@ -26,18 +21,17 @@ jobs:
         dotnet workload install maui
         dotnet workload install android
 
-    - name: Restore Packages
-      run: dotnet restore
+    - name: Clean
+      run: dotnet clean NumberPlate/NumberPlate.csproj
 
-    - name: Build
-      run: dotnet build --configuration Release
+    - name: Restore
+      run: dotnet restore NumberPlate/NumberPlate.csproj
+
+    - name: Build Android
+      run: dotnet build NumberPlate/NumberPlate.csproj -f net9.0-android -c Release
 
     - name: Publish APK
-      run: >
-        dotnet publish
-        NumberPlate/NumberPlate.csproj
-        -f net8.0-android
-        -c Release
+      run: dotnet publish NumberPlate/NumberPlate.csproj -f net9.0-android -c Release
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
