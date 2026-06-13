@@ -1,0 +1,46 @@
+name: Build Android App
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Install MAUI
+      run: |
+        dotnet workload install maui
+        dotnet workload install android
+
+    - name: Restore Packages
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release
+
+    - name: Publish APK
+      run: >
+        dotnet publish
+        NumberPlate/NumberPlate.csproj
+        -f net8.0-android
+        -c Release
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: AndroidAPK
+        path: '**/*.apk'
